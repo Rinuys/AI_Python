@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math as mt
 
-
 sig = lambda x : 1.0/(1.0+mt.exp(-x*1.0))
 def relu(x):
     if x > 0.0:
@@ -11,8 +10,8 @@ def relu(x):
     elif x == 0.0:
         return 0.5*x
     else:
-        return 0.1*x
-
+        return 0.0
+        #return 0.1*x # Leaky ReLU
 dif_sig = lambda x : sig(x)*(1.0-sig(x))
 def dif_relu(x):
     if x > 0.0:
@@ -20,8 +19,8 @@ def dif_relu(x):
     elif x == 0.0:
         return 0.5
     else:
-        return 0.1
-
+        return 0.0
+        #return 0.1 # Leaky ReLU
 func = sig
 dif_func = dif_sig
 
@@ -44,15 +43,15 @@ random.seed(seed=20181114)
 ]'''
 
 # XOR
-'''data = [
+data = [
     (array([1,0,0]),0),
     (array([1,0,1]),1),
     (array([1,1,0]),1),
     (array([1,1,1]),0)
-]'''
+]
 
 # 도넛모양
-data = [
+'''data = [
     (array([1,0,0]),0),
     (array([1,0,0.5]),0),
     (array([1,0,1]),0),
@@ -62,7 +61,7 @@ data = [
     (array([1,1,0]),0),
     (array([1,1,0.5]),0),
     (array([1,1,1]),0)
-]
+]'''
 
 train_set0_x1=[]
 train_set0_x2=[]
@@ -91,14 +90,14 @@ linex = np.linspace(-1,30,3)
 ###############################################################################
 
 input_node = [2]    # Input Lyaer의 노드 수
-hidden_node = [9]   # Hidden Layer의 노드 수 배열([2,3,5,4,2]와 같이 가능)
+hidden_node = [2]   # Hidden Layer의 노드 수 배열([2,3,5,4,2]와 같이 가능)
 output_node = [1]   # Output Layer의 노드 수
 layer = input_node + hidden_node + output_node  # 전체 Layer의 노드 수 배열
 delta = []          # delta 값들을 저장할 배열
 net = []            # net 값들을 저장할 배열
 w=[]                # weight 값들을 저장할 배열
 c = 0.2           # Learning Rate
-n = 100000         # Training Iteration 횟수
+n = 8000         # Training Iteration 횟수
 
 # Initialize
 for i in range(1,len(layer)):
@@ -119,7 +118,7 @@ error = []
 for N in range(1,n+1):
     if N % (n/5) == 0:
         print('\nn=%d' % N)
-        ################### AND, OR, XOR Gate 분석용 코드 ##############################
+        ################### Layer 1 Node 들의 직선 그래프 코드 #########################
         for i in range(len(w[0])):
             liney = -(w[0][i][1]*linex+w[0][i][0]-0.5)/(w[0][i][2]+0.00000000001)
             subplot.plot(linex,liney, label = 'L1 x%d, N = %d' % (i+1,N))
@@ -172,7 +171,7 @@ subplot_error.plot(error)
 ##############################################################################################
 
 #################### 도넛 모양 분석용 그래프 코드 ##############################################
-def calc(x):
+'''def calc(x):
     x = [x]
     # 각 노드마다 f(net)의 값을 x에 저장
     for i in range(0,len(layer)-1):
@@ -198,7 +197,7 @@ for x in locations:
 p_vals = np.array(p_vals)
 p_vals = p_vals.reshape((100,100))
 subplot1.imshow(p_vals, origin = 'lower', extent = (-0.5,1.5,-0.5,1.5),cmap=plt.cm.gray_r, alpha=0.5)
-
+'''
 ###############################################################################################
 
 #################### 파일 출력 코드 ############################################################
